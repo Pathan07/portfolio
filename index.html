@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محمد طه خان — مطوّر Flutter</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Kufi+Arabic:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --white:     #ffffff;
+  --blue:      #1a56db;
+  --blue-dark: #1e429f;
+  --blue-soft: #ebf0ff;
+  --blue-mid:  #c3d3f7;
+  --g50:       #f8faff;
+  --g100:      #eef1f8;
+  --g200:      #dde3f0;
+  --g400:      #8896b3;
+  --g600:      #4a5568;
+  --black:     #0f172a;
+  --font-en:   'Roboto', sans-serif;
+  --font-ar:   'Noto Kufi Arabic', sans-serif;
+}
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--font-ar);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+}
+body.en {
+  font-family: var(--font-en);
+  direction: ltr;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: var(--blue-dark);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+.nav-logo {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--white);
+  white-space: nowrap;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-links {
+  list-style: none;
+  display: none;
+  gap: 20px;
+}
+.nav-links a {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: #fff; }
+
+.lang-toggle {
+  display: flex;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50px;
+  padding: 2px;
+  gap: 1px;
+}
+.lang-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 13px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: rgba(255,255,255,0.7);
+  transition: all 0.18s;
+  letter-spacing: 0.5px;
+}
+.lang-btn.active {
+  background: var(--white);
+  color: var(--blue-dark);
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
+  padding: 20px 16px 0;
+  color: var(--white);
+}
+.hero-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 5px;
+  background: rgba(255,255,255,0.12);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.hero h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--white);
+}
+body.en .hero h1 { letter-spacing: -0.2px; }
+
+.hero-contact-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  flex-shrink: 0;
+}
+body.en .hero-contact-inline { align-items: flex-end; }
+.hci {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+}
+
+.hero-desc {
+  font-size: 0.81rem;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+/* Stats bar */
+.hero-stats {
+  display: flex;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  margin: 0 -16px;
+}
+.stat {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+.stat:last-child { border-right: none; }
+body.en .stat { border-right: 1px solid rgba(255,255,255,0.15); }
+body.en .stat:last-child { border-right: none; }
+
+.stat-num {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-top: 2px;
+}
+
+/* ── PAGE ── */
+.page {
+  padding: 0 16px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ── SECTION ── */
+.section {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--g200);
+}
+.section:last-child { border-bottom: none; }
+
+.section-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--blue-soft);
+}
+
+/* ── ABOUT ── */
+.about-text {
+  font-size: 0.84rem;
+  color: var(--g600);
+  line-height: 1.9;
+}
+.about-text strong { color: var(--black); font-weight: 600; }
+
+/* ── EXPERIENCE CARDS ── */
+.exp-card {
+  background: var(--g50);
+  border: 1px solid var(--g200);
+  border-right: 4px solid var(--blue);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+body.en .exp-card {
+  border-right: 1px solid var(--g200);
+  border-left: 4px solid var(--blue);
+}
+.exp-card:last-child { margin-bottom: 0; }
+
+.exp-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+.exp-company { font-size: 0.92rem; font-weight: 700; color: var(--black); }
+.exp-date {
+  font-size: 0.68rem;
+  color: var(--blue);
+  background: var(--blue-soft);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.exp-role { font-size: 0.76rem; color: var(--g400); margin-bottom: 10px; }
+
+.exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.exp-bullets li {
+  font-size: 0.81rem;
+  color: var(--g600);
+  padding-right: 14px;
+  position: relative;
+  line-height: 1.55;
+}
+body.en .exp-bullets li { padding-right: 0; padding-left: 14px; }
+.exp-bullets li::before {
+  content: '◆';
+  position: absolute;
+  right: 0;
+  color: var(--blue);
+  font-size: 0.45rem;
+  top: 5px;
+}
+body.en .exp-bullets li::before { right: auto; left: 0; }
+
+/* ── EDUCATION CARD ── */
+.edu-card {
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-mid);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.edu-name { font-size: 0.92rem; font-weight: 700; color: var(--blue-dark); margin-bottom: 2px; }
+.edu-uni { font-size: 0.8rem; color: var(--g600); margin-bottom: 2px; }
+.edu-year {
+  font-size: 0.68rem;
+  color: var(--blue);
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: inline-block;
+  background: var(--white);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+.edu-desc { font-size: 0.8rem; color: var(--g600); line-height: 1.75; }
+.edu-desc strong { color: var(--blue-dark); font-weight: 600; }
+
+/* ── PROJECT CARDS ── */
+.projects-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.project-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 4px rgba(26,86,219,0.06);
+}
+.project-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.project-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+}
+.project-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag {
+  font-size: 0.65rem;
+  color: var(--blue);
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-mid);
+  border-radius: 3px;
+  padding: 1px 7px;
+  font-weight: 500;
+}
+.project-bullets { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.project-bullets li {
+  font-size: 0.79rem;
+  color: var(--g600);
+  padding-right: 13px;
+  position: relative;
+  line-height: 1.5;
+}
+body.en .project-bullets li { padding-right: 0; padding-left: 13px; }
+.project-bullets li::before {
+  content: '–';
+  position: absolute;
+  right: 0;
+  color: var(--blue);
+  font-weight: 700;
+}
+body.en .project-bullets li::before { right: auto; left: 0; }
+
+/* ── SKILLS ── */
+.skill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-chip {
+  font-size: 0.78rem;
+  background: var(--g50);
+  border: 1px solid var(--g200);
+  border-radius: 5px;
+  padding: 5px 13px;
+  color: var(--black);
+  font-weight: 500;
+}
+
+/* ── CERTS ── */
+.certs-grid { display: flex; flex-direction: column; gap: 8px; }
+.cert-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--g50);
+  border: 1px solid var(--g200);
+  border-radius: 7px;
+  padding: 10px 14px;
+}
+.cert-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.cert-name { font-size: 0.83rem; font-weight: 500; color: var(--black); line-height: 1.3; }
+.cert-issuer { font-size: 0.72rem; color: var(--g400); margin-top: 1px; }
+
+/* ── LANGUAGES ── */
+.lang-list { display: flex; gap: 10px; flex-wrap: wrap; }
+.lang-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-mid);
+  border-radius: 6px;
+  padding: 7px 16px;
+  color: var(--blue-dark);
+  font-weight: 500;
+}
+
+/* ── CONTACT BAR ── */
+.contact-bar {
+  background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+  color: var(--white);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contact-name-big { font-size: 0.95rem; font-weight: 700; }
+.contact-details { display: flex; flex-direction: column; gap: 5px; }
+.contact-detail { font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+
+/* ── DESKTOP ── */
+@media (min-width: 640px) {
+  nav { padding: 0 32px; }
+  .nav-links { display: flex; }
+  .hero { padding: 28px 32px 0; }
+  .hero-stats { margin: 0 -32px; }
+  .hero h1 { font-size: 2.1rem; }
+  .page { padding: 0 32px; }
+  .section { padding: 26px 0; }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .project-card:last-child:nth-child(odd) { grid-column: span 2; }
+  .contact-bar { padding: 24px 32px; flex-direction: row; justify-content: space-between; align-items: center; }
+  .contact-details { flex-direction: row; gap: 24px; }
+}
+@media (min-width: 900px) {
+  nav { padding: 0 56px; }
+  .hero { padding: 40px 56px 0; }
+  .hero-stats { margin: 0 -56px; }
+  .hero h1 { font-size: 2.6rem; }
+  .page { padding: 0 56px; }
+  .contact-bar { padding: 28px 56px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" id="nav-logo">محمد طه خان</div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#experience" id="nav-exp">الخبرة</a></li>
+      <li><a href="#projects" id="nav-proj">المشاريع</a></li>
+      <li><a href="#contact" id="nav-contact">التواصل</a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('ar')">AR</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <div class="hero-badge" id="hero-tag">مطوّر Flutter</div>
+      <h1 id="hero-name">محمد <strong>طه خان</strong></h1>
+    </div>
+    <div class="hero-contact-inline">
+      <span class="hci">📍 لاهور، بنجاب</span>
+      <span class="hci">📞 03074749381</span>
+      <span class="hci">✉️ tahakhaan19@gmail.com</span>
+    </div>
+  </div>
+  <p class="hero-desc" id="hero-desc">مطوّر Flutter بخبرة عامين في بناء تطبيقات جوال عالية الجودة لأنظمة Android وiOS — متخصص في الـ Widgets القابلة لإعادة الاستخدام والبنية النظيفة وFirebase وواجهات المستخدم المتجاوبة.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">2+</div>
+      <div class="stat-label" id="stat-years">سنوات خبرة</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8+</div>
+      <div class="stat-label" id="stat-projects">مشروع</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-label" id="stat-certs">شهادات</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label" id="stat-comp">شركات</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="page">
+
+  <!-- About -->
+  <div class="section">
+    <div class="section-label" id="lbl-about">نبذة تعريفية</div>
+    <p class="about-text" id="about-text">أنا <strong>محمد طه خان</strong>، مطوّر <strong>Flutter</strong> بخبرة عامين في بناء تطبيقات جوال عالية الجودة متعددة المنصات لأنظمة <strong>Android وiOS</strong>. أتخصص في إنشاء الـ Widgets القابلة لإعادة الاستخدام وواجهات المستخدم المتجاوبة، ودمج <strong>Firebase Firestore</strong> وواجهات RESTful API ونماذج الذكاء الاصطناعي باستخدام <strong>TensorFlow</strong>. أطبّق إدارة الحالة الفعّالة لضمان أداء أفضل واستقرار وقابلية للتوسع. أحرص على كتابة كود نظيف وقابل للصيانة وتقديم حلول تلبّي الأهداف التجارية وتوقعات المستخدمين.</p>
+  </div>
+
+  <!-- Experience -->
+  <div class="section" id="experience">
+    <div class="section-label" id="lbl-exp">الخبرة العملية</div>
+
+    <div class="exp-card">
+      <div class="exp-top">
+        <div class="exp-company">Djenericsol</div>
+        <div class="exp-date">03/2025 – 11/2025</div>
+      </div>
+      <div class="exp-role" id="role1">مطوّر Flutter · بنجاب، لاهور</div>
+      <ul class="exp-bullets" id="bullets1">
+        <li>بناء وصيانة تطبيقات Flutter متعددة المنصات مع التركيز على الأداء واتساق واجهة المستخدم.</li>
+        <li>إنشاء Widgets متجاوبة قابلة لإعادة الاستخدام وتطبيق بنية معمارية نظيفة لكود قابل للتوسع والصيانة.</li>
+        <li>دمج Firebase (المصادقة، Firestore، Cloud Messaging) واستهلاك RESTful APIs لتفعيل وظائف التطبيق الديناميكية.</li>
+        <li>التعاون مع فرق التصميم والـ Backend لضمان التسليم في الوقت المحدد بجودة عالية.</li>
+      </ul>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-top">
+        <div class="exp-company">Orbilon Technologies</div>
+        <div class="exp-date">10/2024 – 03/2025</div>
+      </div>
+      <div class="exp-role" id="role2">مطوّر Flutter · بنجاب، لاهور</div>
+      <ul class="exp-bullets" id="bullets2">
+        <li>تطوير وصيانة تطبيقات Flutter متعددة المنصات مع ضمان الأداء السلس وتجربة المستخدم عبر Android وiOS.</li>
+        <li>تصميم واجهات مستخدم متجاوبة وفق مبادئ التصميم الحديثة مع إدارة حالة فعّالة وبنية مشروع منظمة.</li>
+        <li>دمج خدمات Firebase (المصادقة، Firestore، Cloud Messaging) وربط RESTful APIs لتقديم وظائف التطبيق الديناميكية.</li>
+        <li>التعاون مع الفرق متعددة التخصصات لمواءمة ميزات المنتج مع الأهداف التجارية وتسليم حلول جوال عالية الأداء.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Education -->
+  <div class="section">
+    <div class="section-label" id="lbl-edu">التعليم</div>
+    <div class="edu-card">
+      <div class="edu-name" id="edu-degree">بكالوريوس هندسة البرمجيات</div>
+      <div class="edu-uni" id="edu-uni">جامعة سوبيريور – الحرم الذهبي · لاهور، بنجاب</div>
+      <div class="edu-year" id="edu-year">تخرّج: أغسطس 2025</div>
+      <p class="edu-desc" id="edu-desc">حصلت على درجة البكالوريوس في هندسة البرمجيات مع التركيز على تطوير البرمجيات وتصميم الأنظمة والتقنيات الحديثة. اكتسبت خبرة عملية في البرمجة وهياكل البيانات وقواعد البيانات ومبادئ هندسة البرمجيات. تعلّمت وطبّقت لغات برمجة متعددة تشمل <strong>Dart وPython وJava وC++</strong>، مع تطوير مشاريع أكاديمية وأعمال موجّهة نحو الصناعة لتعزيز مهارات حل المشكلات والكفاءات التقنية.</p>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="section" id="projects">
+    <div class="section-label" id="lbl-proj">المشاريع</div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn1">E-Shop</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Provider</span></div>
+        </div>
+        <ul class="project-bullets" id="pb1">
+          <li>تطبيق Flutter للتجارة الإلكترونية مع Firebase Firestore للتخزين الفوري للبيانات.</li>
+          <li>دمج Provider لإدارة الحالة بكفاءة.</li>
+          <li>لوحة تحكم إدارية لإدارة المنتجات والطلبات وبيانات العملاء.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn2">Skin Safe</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">AI/ML</span><span class="tag">Firebase</span></div>
+        </div>
+        <ul class="project-bullets" id="pb2">
+          <li>تطبيق مدعوم بالذكاء الاصطناعي للكشف عن سرطان الميلانوما الجلدي.</li>
+          <li>دمج مسح الصور لتحليل حالات الجلد وتشخيصها.</li>
+          <li>Firebase Firestore لتخزين بيانات المرضى وروبوت محادثة للدعم الفوري.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn3">Seabee Study</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">AI</span><span class="tag">Firebase</span><span class="tag">Subscription</span></div>
+        </div>
+        <ul class="project-bullets" id="pb3">
+          <li>تطبيق تعليمي للاستعداد للامتحانات في مختلف المجالات.</li>
+          <li>اختبارات تفاعلية وإجابات مدعومة بالذكاء الاصطناعي وبطاقات تعليمية وأدلة صوتية.</li>
+          <li>نموذج اشتراك مع Firebase Firestore لإدارة البيانات وتتبع تقدم المستخدم.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn4">BRAKE</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">Real-time</span><span class="tag">REST API</span><span class="tag">Accessibility</span></div>
+        </div>
+        <ul class="project-bullets" id="pb4">
+          <li>تطبيق لتعليم السلامة المرورية للأشخاص ذوي الإعاقة.</li>
+          <li>شرائح عرض مدفوعة بـ API لتحسين إمكانية الوصول والتعلم التفاعلي.</li>
+          <li>مزامنة فورية تعكس تغييرات الشرائح بين الجوال والويب على الفور.</li>
+          <li>واجهة مستخدم نظيفة ومتجاوبة تركّز على سهولة الاستخدام والأداء.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn5">Digi Fun</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">Gemini AI</span><span class="tag">Firebase</span></div>
+        </div>
+        <ul class="project-bullets" id="pb5">
+          <li>تطبيق تعليمي بتوليد اختبارات ذكية باستخدام Gemini AI.</li>
+          <li>ألعاب تفاعلية ولوحة صدارة ونظام مكافآت لتحفيز المستخدمين.</li>
+          <li>Firebase Firestore لإدارة البيانات في الوقت الفعلي.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn6">Dicker</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">REST API</span><span class="tag">Real-time</span></div>
+        </div>
+        <ul class="project-bullets" id="pb6">
+          <li>منصة مزايدة على الطعام وعناصر المطاعم عبر APIs.</li>
+          <li>يستطيع البائعون تقديم عروض مضادة، وعند الاتفاق يبدأ مؤقت عدّ تنازلي.</li>
+          <li>تتبع الصفقات الجارية والسابقة في الوقت الفعلي.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn7">تطبيق إدارة السكن</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Admin Panel</span></div>
+        </div>
+        <ul class="project-bullets" id="pb7">
+          <li>بوابتان منفصلتان للمدير والطالب.</li>
+          <li>المدير يضيف ويحذف ويحدّث سجلات الطلاب ويتابع الرسوم المستحقة.</li>
+          <li>الطلاب يتابعون تفاصيل الرسوم وحالة الدفع في الوقت الفعلي.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name" id="pn8">Orderly</div>
+          <div class="project-tags"><span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">Cloud Functions</span><span class="tag">Riverpod</span></div>
+        </div>
+        <ul class="project-bullets" id="pb8">
+          <li>اكتشاف المطاعم القريبة بالتصفية الجغرافية باستخدام معادلة Haversine.</li>
+          <li>طلب منظم بفئات واختيار عناصر وإدارة سلة تسوق.</li>
+          <li>لوحة تحكم للمطعم: الطلبات الحية والإشعارات والتحليلات (ساعات الذروة، التقارير اليومية/الأسبوعية/الشهرية، أكثر العناصر مبيعاً).</li>
+          <li>نظام ولاء وشارات لتحفيز العملاء المتكررين.</li>
+          <li>Firebase وCloud Functions للتحديثات الفورية وبنية قابلة للتوسع لمطاعم متعددة.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="section">
+    <div class="section-label" id="lbl-skills">المهارات</div>
+    <div class="skill-grid">
+      <span class="skill-chip" id="sk1">تطوير Flutter</span>
+      <span class="skill-chip" id="sk2">إدارة الحالة (Riverpod)</span>
+      <span class="skill-chip" id="sk3">منصة Firebase</span>
+      <span class="skill-chip" id="sk4">دمج REST API</span>
+      <span class="skill-chip" id="sk5">واجهات متجاوبة</span>
+      <span class="skill-chip" id="sk6">تصحيح الأخطاء والاختبار</span>
+      <span class="skill-chip" id="sk7">البنية النظيفة</span>
+      <span class="skill-chip" id="sk8">بناء المنطق البرمجي</span>
+      <span class="skill-chip" id="sk9">استضافة التطبيقات</span>
+      <span class="skill-chip" id="sk10">إدارة الوقت</span>
+      <span class="skill-chip" id="sk11">مهارات التواصل</span>
+    </div>
+  </div>
+
+  <!-- Certificates -->
+  <div class="section">
+    <div class="section-label" id="lbl-certs">الشهادات</div>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name" id="cert1">الدليل الشامل لتطوير Flutter</div>
+          <div class="cert-issuer">Udemy</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name" id="cert2">تطوير Flutter</div>
+          <div class="cert-issuer">PNY Trainings</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name" id="cert3">تطوير تطبيقات Android للجوال</div>
+          <div class="cert-issuer" id="cert3i">برنامج کامياب جوان</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Languages -->
+  <div class="section">
+    <div class="section-label" id="lbl-langs">اللغات</div>
+    <div class="lang-list">
+      <div class="lang-chip">🇬🇧 <span id="lang1">الإنجليزية</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTACT -->
+<div class="contact-bar" id="contact">
+  <div class="contact-name-big" id="contact-name">محمد طه خان</div>
+  <div class="contact-details">
+    <span class="contact-detail">📍 لاهور، بنجاب</span>
+    <span class="contact-detail">📞 03074749381</span>
+    <span class="contact-detail">✉️ tahakhaan19@gmail.com</span>
+  </div>
+</div>
+
+<script>
+var T = {
+  ar: {
+    'nav-logo':'محمد طه خان','nav-exp':'الخبرة','nav-proj':'المشاريع','nav-contact':'التواصل',
+    'hero-tag':'مطوّر Flutter',
+    'hero-name':'محمد <strong>طه خان</strong>',
+    'hero-desc':'مطوّر Flutter بخبرة عامين في بناء تطبيقات جوال عالية الجودة لأنظمة Android وiOS — متخصص في الـ Widgets القابلة لإعادة الاستخدام والبنية النظيفة وFirebase وواجهات المستخدم المتجاوبة.',
+    'stat-years':'سنوات خبرة','stat-projects':'مشروع','stat-certs':'شهادات','stat-comp':'شركات',
+    'lbl-about':'نبذة تعريفية',
+    'about-text':'أنا <strong>محمد طه خان</strong>، مطوّر <strong>Flutter</strong> بخبرة عامين في بناء تطبيقات جوال عالية الجودة متعددة المنصات لأنظمة <strong>Android وiOS</strong>. أتخصص في إنشاء الـ Widgets القابلة لإعادة الاستخدام وواجهات المستخدم المتجاوبة، ودمج <strong>Firebase Firestore</strong> وواجهات RESTful API ونماذج الذكاء الاصطناعي باستخدام <strong>TensorFlow</strong>. أطبّق إدارة الحالة الفعّالة لضمان أداء أفضل واستقرار وقابلية للتوسع.',
+    'lbl-exp':'الخبرة العملية',
+    'role1':'مطوّر Flutter · بنجاب، لاهور',
+    'bullets1':['بناء وصيانة تطبيقات Flutter متعددة المنصات مع التركيز على الأداء واتساق واجهة المستخدم.','إنشاء Widgets متجاوبة قابلة لإعادة الاستخدام وتطبيق بنية معمارية نظيفة لكود قابل للتوسع.','دمج Firebase (المصادقة، Firestore، Cloud Messaging) واستهلاك RESTful APIs.','التعاون مع فرق التصميم والـ Backend لضمان التسليم في الوقت المحدد بجودة عالية.'],
+    'role2':'مطوّر Flutter · بنجاب، لاهور',
+    'bullets2':['تطوير وصيانة تطبيقات Flutter متعددة المنصات مع ضمان الأداء السلس عبر Android وiOS.','تصميم واجهات مستخدم متجاوبة وفق مبادئ التصميم الحديثة مع إدارة حالة فعّالة.','دمج خدمات Firebase وربط RESTful APIs لتقديم وظائف التطبيق الديناميكية.','التعاون مع الفرق متعددة التخصصات لمواءمة ميزات المنتج مع الأهداف التجارية.'],
+    'lbl-edu':'التعليم','edu-degree':'بكالوريوس هندسة البرمجيات',
+    'edu-uni':'جامعة سوبيريور – الحرم الذهبي · لاهور، بنجاب','edu-year':'تخرّج: أغسطس 2025',
+    'edu-desc':'حصلت على درجة البكالوريوس في هندسة البرمجيات مع التركيز على تطوير البرمجيات وتصميم الأنظمة والتقنيات الحديثة. اكتسبت خبرة عملية في البرمجة وهياكل البيانات وقواعد البيانات ومبادئ هندسة البرمجيات. تعلّمت وطبّقت لغات <strong>Dart وPython وJava وC++</strong> في مشاريع أكاديمية وأعمال موجّهة نحو الصناعة.',
+    'lbl-proj':'المشاريع',
+    'pn1':'E-Shop','pb1':['تطبيق Flutter للتجارة الإلكترونية مع Firebase Firestore للتخزين الفوري للبيانات.','دمج Provider لإدارة الحالة بكفاءة.','لوحة تحكم إدارية لإدارة المنتجات والطلبات وبيانات العملاء.'],
+    'pn2':'Skin Safe','pb2':['تطبيق مدعوم بالذكاء الاصطناعي للكشف عن سرطان الميلانوما الجلدي.','دمج مسح الصور لتحليل حالات الجلد وتشخيصها.','Firebase Firestore لتخزين بيانات المرضى وروبوت محادثة للدعم الفوري.'],
+    'pn3':'Seabee Study','pb3':['تطبيق تعليمي للاستعداد للامتحانات في مختلف المجالات.','اختبارات تفاعلية وإجابات مدعومة بالذكاء الاصطناعي وبطاقات تعليمية وأدلة صوتية.','نموذج اشتراك مع Firebase Firestore لإدارة البيانات وتتبع تقدم المستخدم.'],
+    'pn4':'BRAKE','pb4':['تطبيق لتعليم السلامة المرورية للأشخاص ذوي الإعاقة.','شرائح عرض مدفوعة بـ API لتحسين إمكانية الوصول والتعلم التفاعلي.','مزامنة فورية تعكس تغييرات الشرائح بين الجوال والويب على الفور.','واجهة مستخدم نظيفة ومتجاوبة تركّز على سهولة الاستخدام والأداء.'],
+    'pn5':'Digi Fun','pb5':['تطبيق تعليمي بتوليد اختبارات ذكية باستخدام Gemini AI.','ألعاب تفاعلية ولوحة صدارة ونظام مكافآت لتحفيز المستخدمين.','Firebase Firestore لإدارة البيانات في الوقت الفعلي.'],
+    'pn6':'Dicker','pb6':['منصة مزايدة على الطعام وعناصر المطاعم عبر APIs.','يستطيع البائعون تقديم عروض مضادة، وعند الاتفاق يبدأ مؤقت عدّ تنازلي.','تتبع الصفقات الجارية والسابقة في الوقت الفعلي.'],
+    'pn7':'تطبيق إدارة السكن','pb7':['بوابتان منفصلتان للمدير والطالب.','المدير يضيف ويحذف ويحدّث سجلات الطلاب ويتابع الرسوم المستحقة.','الطلاب يتابعون تفاصيل الرسوم وحالة الدفع في الوقت الفعلي.'],
+    'pn8':'Orderly','pb8':['اكتشاف المطاعم القريبة بالتصفية الجغرافية باستخدام معادلة Haversine.','طلب منظم بفئات واختيار عناصر وإدارة سلة تسوق.','لوحة تحكم للمطعم: الطلبات الحية والإشعارات والتحليلات.','نظام ولاء وشارات لتحفيز العملاء المتكررين.','Firebase وCloud Functions للتحديثات الفورية وبنية قابلة للتوسع.'],
+    'lbl-skills':'المهارات',
+    'sk1':'تطوير Flutter','sk2':'إدارة الحالة (Riverpod)','sk3':'منصة Firebase','sk4':'دمج REST API','sk5':'واجهات متجاوبة','sk6':'تصحيح الأخطاء والاختبار','sk7':'البنية النظيفة','sk8':'بناء المنطق البرمجي','sk9':'استضافة التطبيقات','sk10':'إدارة الوقت','sk11':'مهارات التواصل',
+    'lbl-certs':'الشهادات','cert1':'الدليل الشامل لتطوير Flutter','cert2':'تطوير Flutter','cert3':'تطوير تطبيقات Android للجوال','cert3i':'برنامج کامياب جوان',
+    'lbl-langs':'اللغات','lang1':'الإنجليزية','contact-name':'محمد طه خان'
+  },
+  en: {
+    'nav-logo':'Muhammad Taha Khan','nav-exp':'Experience','nav-proj':'Projects','nav-contact':'Contact',
+    'hero-tag':'Flutter Developer',
+    'hero-name':'Muhammad <strong>Taha Khan</strong>',
+    'hero-desc':'Flutter Developer with 2+ years building high-quality cross-platform mobile apps for Android & iOS — specializing in reusable widgets, clean architecture, Firebase, and responsive UI.',
+    'stat-years':'Years Exp','stat-projects':'Projects','stat-certs':'Certs','stat-comp':'Companies',
+    'lbl-about':'About',
+    'about-text':'I am <strong>Muhammad Taha Khan</strong>, a <strong>Flutter Developer</strong> with two years of experience building high-quality cross-platform mobile apps for <strong>Android and iOS</strong>. I specialize in creating reusable widgets, responsive UIs, and integrating <strong>Firebase Firestore</strong>, RESTful APIs, and AI models using <strong>TensorFlow</strong>. I implement efficient state management to ensure better app performance, stability, and scalability.',
+    'lbl-exp':'Experience',
+    'role1':'Flutter Developer · Punjab, Lahore',
+    'bullets1':['Built and maintained cross-platform Flutter apps with a strong focus on performance and UI/UX consistency.','Created reusable responsive widgets and implemented clean architecture for scalable and maintainable code.','Integrated Firebase (Auth, Firestore, Cloud Messaging) and consumed RESTful APIs to enable dynamic app functionality.','Collaborated with designers and backend teams to ensure timely delivery of high-quality applications.'],
+    'role2':'Flutter Developer · Punjab, Lahore',
+    'bullets2':['Developed and maintained cross-platform Flutter apps ensuring seamless performance across Android and iOS.','Engineered responsive UIs using modern design principles with efficient state management and structured architecture.','Integrated Firebase services (Auth, Firestore, Cloud Messaging) and RESTful APIs for dynamic, data-driven functionality.','Collaborated with cross-functional teams to align product features with business objectives.'],
+    'lbl-edu':'Education','edu-degree':'BS Software Engineering',
+    'edu-uni':'Superior University Gold Campus · Lahore, Punjab','edu-year':'Graduated: August 2025',
+    'edu-desc':'Completed a Bachelor\'s in Software Engineering focused on software development, system design, and emerging technologies. Gained practical experience in programming, data structures, databases, and software engineering principles. Applied <strong>Dart, Python, Java, and C++</strong> across academic and industry-oriented projects.',
+    'lbl-proj':'Projects',
+    'pn1':'E-Shop','pb1':['Flutter e-commerce app using Firebase Firestore for real-time data storage.','Provider for efficient state management throughout the app.','Admin panel for managing products, orders, and customer data.'],
+    'pn2':'Skin Safe','pb2':['AI-powered app for melanoma skin cancer detection.','Image scanning to analyze and diagnose skin conditions.','Firebase Firestore for patient data storage and a chatbot for real-time user assistance.'],
+    'pn3':'Seabee Study','pb3':['Educational app for exam preparation across various fields.','Interactive quizzes, AI-powered answers, flashcards, and audio study guides.','Subscription model with Firebase Firestore for data management and user progress tracking.'],
+    'pn4':'BRAKE','pb4':['Flutter app for driving education and road safety for persons with disabilities.','API-driven presentation slides improving accessibility and interactive learning.','Real-time sync mechanism so slide changes instantly reflect across mobile and web.','Clean, responsive UI emphasizing usability, accessibility, and performance.'],
+    'pn5':'Digi Fun','pb5':['Educational app with AI-powered quiz generation using Gemini chatbot.','Interactive games, leaderboard, and reward system to engage users.','Firebase Firestore for real-time data management and user progress tracking.'],
+    'pn6':'Dicker','pb6':['Bidding platform for food and restaurant items via APIs.','Sellers can counter-bid; a countdown timer starts upon deal agreement.','Real-time tracking of past and ongoing deals.'],
+    'pn7':'Hostel Management App','pb7':['Separate admin and student portals.','Admins can add, delete, update student records and manage dues.','Students view fee details and payment status in real-time.'],
+    'pn8':'Orderly','pb8':['Location-based restaurant discovery using the Haversine formula.','Structured menu ordering with categories, item selection, and cart management.','Restaurant dashboard: live orders, notifications, and analytics (peak hours, reports, top-selling items).','Loyalty and badge system to incentivize repeat customers.','Firebase & Cloud Functions for real-time updates and scalable multi-restaurant architecture.'],
+    'lbl-skills':'Skills',
+    'sk1':'Flutter Development','sk2':'State Management (Riverpod)','sk3':'Firebase Suite','sk4':'REST API Integration','sk5':'Responsive UI/UX','sk6':'Debugging & Testing','sk7':'Clean Architecture','sk8':'Logic Building','sk9':'App Hosting','sk10':'Time Management','sk11':'Communication Skills',
+    'lbl-certs':'Certificates','cert1':'Flutter Development Complete Guide','cert2':'Flutter Development','cert3':'Android Mobile App Development','cert3i':'Kamyab Jawan Programme',
+    'lbl-langs':'Languages','lang1':'English','contact-name':'Muhammad Taha Khan'
+  }
+};
+
+function setLang(lang) {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.body.classList.toggle('en', lang === 'en');
+
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
+  });
+
+  var t = T[lang];
+
+  // Simple text/html updates
+  ['nav-logo','nav-exp','nav-proj','nav-contact','hero-tag','hero-name','hero-desc',
+   'stat-years','stat-projects','stat-certs','stat-comp',
+   'lbl-about','about-text','lbl-exp','role1','role2',
+   'lbl-edu','edu-degree','edu-uni','edu-year','edu-desc','lbl-proj',
+   'pn1','pn2','pn3','pn4','pn5','pn6','pn7','pn8',
+   'lbl-skills','sk1','sk2','sk3','sk4','sk5','sk6','sk7','sk8','sk9','sk10','sk11',
+   'lbl-certs','cert1','cert2','cert3','cert3i','lbl-langs','lang1','contact-name'
+  ].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && t[id] !== undefined) el.innerHTML = t[id];
+  });
+
+  // Bullet lists for experience
+  ['bullets1','bullets2'].forEach(function(id) {
+    var ul = document.getElementById(id);
+    if (!ul) return;
+    ul.querySelectorAll('li').forEach(function(li, i) {
+      if (t[id] && t[id][i]) li.textContent = t[id][i];
+    });
+  });
+
+  // Bullet lists for projects
+  ['pb1','pb2','pb3','pb4','pb5','pb6','pb7','pb8'].forEach(function(id) {
+    var ul = document.getElementById(id);
+    if (!ul) return;
+    ul.querySelectorAll('li').forEach(function(li, i) {
+      if (t[id] && t[id][i]) li.textContent = t[id][i];
+    });
+  });
+}
+</script>
+</body>
+</html>
